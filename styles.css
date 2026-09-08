@@ -101,3 +101,287 @@ body {
 .close-btn:hover {
   color: #E50914;
 }
+
+/* Pantalla Splash */
+#splash-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: #000;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  transition: opacity 0.5s ease;
+}
+
+.splash-logo {
+  color: #E50914;
+  font-size: 36px;
+  letter-spacing: 2px;
+}
+
+/* Spinner de carga */
+.loader {
+  border: 4px solid #333;
+  border-top: 4px solid #E50914;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin-top: 20px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Pantalla de Login */
+#login-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: #141414;
+  display: none; /* Se activa desde JS */
+  justify-content: center;
+  align-items: center;
+  z-index: 9998;
+}
+
+.login-box {
+  background-color: rgba(0, 0, 0, 0.75);
+  padding: 40px;
+  border-radius: 8px;
+  text-align: center;
+  width: 280px;
+}
+
+.login-box input {
+  width: 80%;
+  padding: 10px;
+  font-size: 20px;
+  text-align: center;
+  margin: 15px 0;
+  border-radius: 4px;
+  border: none;
+}
+
+.login-box button {
+  background-color: #E50914;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 90%;
+}
+
+#error-msg {
+  color: #E50914;
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+/* Estilo para la imagen del Splash */
+.splash-logo-img {
+  max-width: 200px; /* Ancho máximo de tu imagen */
+  width: 60%;      /* Se adapta a pantallas más pequeñas */
+  height: auto;
+  margin-bottom: 20px;
+  object-fit: contain;
+}
+
+/* Secciones del Catálogo */
+.catalog-section {
+  padding: 20px 4%;
+}
+
+.catalog-section h2 {
+  color: #ffffff;
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+/* Subtítulos dentro de las tarjetas (para episodios/temporadas) */
+.card-info p {
+  color: #aaaaaa;
+  font-size: 0.85rem;
+  margin-top: 4px;
+}
+
+/* --- ESTILOS DE CARÁTULAS Y MENÚ --- */
+
+/* Menú de Navegación Superior */
+.navbar {
+  display: flex;
+  align-items: center;
+  padding: 15px 4%;
+  background-color: #141414;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-links a {
+  color: #e5e5e5;
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: color 0.3s;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+  color: #ffffff;
+  font-weight: bold;
+}
+
+/* Rejilla adaptada para pósteres verticales de carátula */
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 15px;
+  padding: 15px 0;
+}
+
+.card {
+  background-color: #181818;
+  border-radius: 6px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
+}
+
+/* Control del tamaño exacto de la carátula */
+.card img {
+  width: 100%;
+  height: 240px;          /* Altura uniforme estilo póster */
+  object-fit: cover;      /* Encaja la imagen sin deformarla */
+  display: block;
+}
+
+.card-info {
+  padding: 10px;
+}
+
+.card-info h3 {
+  font-size: 0.95rem;
+  color: #ffffff;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; /* Pone "..." si el título es largo */
+}
+
+.card-info p {
+  font-size: 0.8rem;
+  color: #aaaaaa;
+  margin-top: 4px;
+}
+
+/* Navegación */
+.navbar {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  padding: 15px 4%;
+  background-color: #141414;
+}
+
+.nav-logo {
+  color: #E50914;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-links a {
+  color: #aaaaaa;
+  text-decoration: none;
+  font-size: 0.95rem;
+}
+
+.nav-links a.active {
+  color: #ffffff;
+  font-weight: bold;
+}
+
+/* Modal de Episodios */
+.episodes-content {
+  background-color: #181818;
+  color: #fff;
+  padding: 25px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 500px;
+  position: relative;
+}
+
+.episodes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 15px;
+  max-height: 350px;
+  overflow-y: auto;
+}
+
+.episode-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 12px;
+  background-color: #222;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.episode-item:hover {
+  background-color: #333;
+}
+
+.ep-num {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #E50914;
+}
+
+.ep-info h4 {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.ep-info p {
+  margin: 3px 0 0 0;
+  font-size: 0.8rem;
+  color: #aaa;
+}
