@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mi Netflix Personal</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Encabezado -->
+  <header class="navbar">
+    <h1 class="logo">NETFLIX CLONE</h1>
+  </header>
+
+  <!-- Catálogo de Películas -->
+  <main class="content">
+    <h2>Películas Gratuitas</h2>
+    <div class="movie-row">
+      
+      <!-- Película 1: muestra la carátula y guarda el ID del video de YouTube en data-video -->
+      <div class="movie-card" onclick="abrirReproductor('eAlGN_mM-L8')">
+        <img src="https://img.youtube.com/vi/eAlGN_mM-L8/maxresdefault.jpg" alt="Película 1" class="poster">
+        <div class="movie-info">
+          <h3>Una película que...</h3>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Ventana Flotante / Modal para el Reproductor Fullscreen -->
+  <div id="videoModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="cerrarReproductor()">&times;</span>
+      <iframe id="youtubeIframe" src="" title="Reproductor" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
