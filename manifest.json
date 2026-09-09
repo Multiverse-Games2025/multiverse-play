@@ -1,9 +1,10 @@
 {
-  "name": "Mi Netflix Personal",
-  "short_name": "StreamApp",
-  "description": "Aplicación privada de streaming personal",
-  "start_url": "./index.html",
-  "display": "standalone",
+  "name": "Multiverse Play",
+  "short_name": "MultiversePlay",
+  "description": "Catálogo privado de streaming personal",
+  "start_url": "./",
+  "scope": "./",
+  "display": "fullscreen",
   "background_color": "#141414",
   "theme_color": "#E50914",
   "icons": [
