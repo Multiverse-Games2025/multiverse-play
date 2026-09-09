@@ -52,44 +52,7 @@ function verificarPIN() {
   }
 }
 
-// Reproductor de Video (YouTube / Películas / Series)
-function abrirReproductor(idVideo) {
-  const modal = document.getElementById('videoModal');
-  const iframe = document.getElementById('youtubeIframe');
-  const videoPlayer = document.getElementById('html5VideoPlayer');
-
-  // Si había una transmisión de IPTV activa, la cerramos y destruimos HLS limpiamente
-  if (hlsInstance) {
-    hlsInstance.destroy();
-    hlsInstance = null;
-  }
-
-  if (videoPlayer) {
-    videoPlayer.pause();
-    videoPlayer.src = "";
-    videoPlayer.style.display = 'none';
-  }
-  
-  if (iframe) {
-    iframe.style.display = 'block';
-    let embedUrl = idVideo;
-    if (!idVideo.startsWith('http')) {
-      embedUrl = `https://www.youtube.com/embed/${idVideo}?autoplay=1&rel=0`;
-    }
-    iframe.src = embedUrl;
-  }
-
-  modal.style.display = "flex";
-
-  // Activa la pantalla completa nativa
-  if (modal.requestFullscreen) {
-    modal.requestFullscreen().catch(err => console.log(err));
-  } else if (modal.webkitRequestFullscreen) { /* Safari */
-    modal.webkitRequestFullscreen();
-  }
-}
-
-// Reproductor de Canales IPTV en Vivo (.m3u8) optimizado
+// Reproductor de Canales IPTV en Vivo (.m3u8) compatible con Android
 function reproducirCanal(urlCanal, nombreCanal) {
   const modal = document.getElementById('videoModal');
   const iframe = document.getElementById('youtubeIframe');
@@ -100,13 +63,14 @@ function reproducirCanal(urlCanal, nombreCanal) {
     iframe.style.display = 'none';
   }
   
-  // Obtenemos o creamos el elemento de video HTML5 para el stream IPTV
+  // Obtenemos o creamos el elemento de video HTML5
   let videoPlayer = document.getElementById('html5VideoPlayer');
   if (!videoPlayer) {
     videoPlayer = document.createElement('video');
     videoPlayer.id = 'html5VideoPlayer';
     videoPlayer.controls = true;
     videoPlayer.autoplay = true;
+    videoPlayer.playsInline = true; // Vital para dispositivos móviles Android/iOS
     videoPlayer.style.width = '100%';
     videoPlayer.style.height = '100%';
     videoPlayer.style.backgroundColor = '#000';
@@ -114,15 +78,16 @@ function reproducirCanal(urlCanal, nombreCanal) {
   }
   videoPlayer.style.display = 'block';
 
-  // Si ya existía una sesión de HLS abierta, la destruimos antes de cargar el nuevo canal
+  // Si ya existía una sesión de HLS abierta, la destruimos
   if (hlsInstance) {
     hlsInstance.destroy();
     hlsInstance = null;
   }
 
-  // Reproducción con HLS.js o soporte nativo
+  // Reproducción adaptada para Android
   if (Hls.isSupported()) {
     hlsInstance = new Hls({
+      debug: false,
       xhrSetup: function (xhr, url) {
         xhr.withCredentials = false;
       }
@@ -131,14 +96,12 @@ function reproducirCanal(urlCanal, nombreCanal) {
     hlsInstance.attachMedia(videoPlayer);
     
     hlsInstance.on(Hls.Events.MANIFEST_PARSED, function() {
-      videoPlayer.play().catch(err => {
-        console.log("Autoplay bloqueado:", err);
-      });
-    });
-
-    hlsInstance.on(Hls.Events.FRAG_LOADED, function() {
-      if (videoPlayer.paused) {
-        videoPlayer.play().catch(e => console.log(e));
+      // En Android es mejor dejar que el usuario presione el botón play si el navegador frena el autoplay
+      const playPromise = videoPlayer.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(error => {
+          console.log("Autoplay prevenido por Android, esperando interacción del usuario.");
+        });
       }
     });
 
@@ -158,6 +121,7 @@ function reproducirCanal(urlCanal, nombreCanal) {
       }
     });
   } else if (videoPlayer.canPlayType('application/vnd.apple.mpegurl')) {
+    // Para dispositivos con soporte nativo (como Safari o algunos reproductores internos)
     videoPlayer.src = urlCanal;
     videoPlayer.addEventListener('loadedmetadata', function() {
       videoPlayer.play().catch(err => console.log(err));
