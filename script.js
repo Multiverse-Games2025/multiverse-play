@@ -1,6 +1,9 @@
 // Definimos tu código de acceso
 const PIN_CORRECTO = "1234";
 
+// Variable global para controlar la instancia activa de HLS (¡Esto faltaba arriba del todo!)
+let hlsInstance = null;
+
 // Al cargar la página, muestra la Splash Screen por 2.5 segundos
 window.addEventListener('DOMContentLoaded', () => {
   setTimeout(() => {
@@ -49,9 +52,6 @@ function verificarPIN() {
   }
 }
 
-// Variable global para controlar la instancia activa de HLS
-let hlsInstance = null;
-
 // Reproductor de Video (YouTube / Películas / Series)
 function abrirReproductor(idVideo) {
   const modal = document.getElementById('videoModal');
@@ -89,7 +89,7 @@ function abrirReproductor(idVideo) {
   }
 }
 
-// Reproductor de Canales IPTV en Vivo (.m3u8)
+// Reproductor de Canales IPTV en Vivo (.m3u8) optimizado
 function reproducirCanal(urlCanal, nombreCanal) {
   const modal = document.getElementById('videoModal');
   const iframe = document.getElementById('youtubeIframe');
@@ -120,24 +120,47 @@ function reproducirCanal(urlCanal, nombreCanal) {
     hlsInstance = null;
   }
 
-  // Reproducción con HLS.js o soporte nativo (Safari)
+  // Reproducción con HLS.js o soporte nativo
   if (Hls.isSupported()) {
-    hlsInstance = new Hls();
+    hlsInstance = new Hls({
+      xhrSetup: function (xhr, url) {
+        xhr.withCredentials = false;
+      }
+    });
     hlsInstance.loadSource(urlCanal);
     hlsInstance.attachMedia(videoPlayer);
+    
     hlsInstance.on(Hls.Events.MANIFEST_PARSED, function() {
-      videoPlayer.play().catch(err => console.log("Autoplay bloqueado:", err));
+      videoPlayer.play().catch(err => {
+        console.log("Autoplay bloqueado:", err);
+      });
     });
-    // Manejo de errores de conexión del stream
+
+    hlsInstance.on(Hls.Events.FRAG_LOADED, function() {
+      if (videoPlayer.paused) {
+        videoPlayer.play().catch(e => console.log(e));
+      }
+    });
+
     hlsInstance.on(Hls.Events.ERROR, function(event, data) {
       if (data.fatal) {
-        console.error("Error fatal en HLS:", data.details);
+        switch (data.type) {
+          case Hls.ErrorTypes.NETWORK_ERROR:
+            hlsInstance.startLoad();
+            break;
+          case Hls.ErrorTypes.MEDIA_ERROR:
+            hlsInstance.recoverMediaError();
+            break;
+          default:
+            hlsInstance.destroy();
+            break;
+        }
       }
     });
   } else if (videoPlayer.canPlayType('application/vnd.apple.mpegurl')) {
     videoPlayer.src = urlCanal;
     videoPlayer.addEventListener('loadedmetadata', function() {
-      videoPlayer.play().catch(err => console.log("Autoplay bloqueado:", err));
+      videoPlayer.play().catch(err => console.log(err));
     });
   }
 
@@ -160,7 +183,6 @@ function cerrarReproductor() {
     iframe.style.display = "block";
   }
   
-  // Destruir HLS al cerrar para liberar memoria y recursos de red
   if (hlsInstance) {
     hlsInstance.destroy();
     hlsInstance = null;
@@ -174,7 +196,6 @@ function cerrarReproductor() {
 
   if (modal) modal.style.display = "none";
 
-  // Sale del modo pantalla completa si está activo
   if (document.fullscreenElement || document.webkitFullscreenElement) {
     if (document.exitFullscreen) {
       document.exitFullscreen();
@@ -231,12 +252,10 @@ document.addEventListener('keydown', function(event) {
   const videoModal = document.getElementById('videoModal');
   const episodesModal = document.getElementById('episodesModal');
 
-  // Tecla ENTER o Botón OK del control remoto sobre elementos enfocados
   if (event.key === 'Enter' && document.activeElement && document.activeElement.tagName !== 'INPUT') {
     document.activeElement.click();
   }
 
-  // Tecla ESCAPE o BACKSPACE para cerrar reproductores o modales
   if (event.key === 'Escape' || event.key === 'Backspace') {
     if (document.activeElement.tagName === 'INPUT') return;
 
