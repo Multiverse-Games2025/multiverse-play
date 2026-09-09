@@ -9,9 +9,26 @@ window.addEventListener('DOMContentLoaded', () => {
     
     setTimeout(() => {
       splash.style.display = 'none';
-      document.getElementById('login-screen').style.display = 'flex';
+      const loginScreen = document.getElementById('login-screen');
+      loginScreen.style.display = 'flex';
+      
+      // Dar foco al input del PIN al aparecer el login
+      const pinInput = document.getElementById('pinInput');
+      if (pinInput) pinInput.focus();
     }, 500); // Tiempo de desvanecimiento
   }, 2500); // 2.5 segundos de Splash Screen
+});
+
+// Listener para presionar Enter en la pantalla de PIN
+document.addEventListener('DOMContentLoaded', () => {
+  const pinInput = document.getElementById('pinInput');
+  if (pinInput) {
+    pinInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        verificarPIN();
+      }
+    });
+  }
 });
 
 function verificarPIN() {
@@ -20,6 +37,12 @@ function verificarPIN() {
 
   if (pinIngresado === PIN_CORRECTO) {
     document.getElementById('login-screen').style.display = 'none';
+    
+    // Auto-seleccionar el primer elemento navegable al entrar
+    const firstFocusable = document.querySelector('.nav-links a, .card, input');
+    if (firstFocusable) {
+      firstFocusable.focus();
+    }
   } else {
     errorMsg.textContent = "Código incorrecto. Intenta de nuevo.";
     document.getElementById('pinInput').value = "";
@@ -52,8 +75,8 @@ function cerrarReproductor() {
   const modal = document.getElementById('videoModal');
   const iframe = document.getElementById('youtubeIframe');
 
-  iframe.src = "";
-  modal.style.display = "none";
+  if (iframe) iframe.src = "";
+  if (modal) modal.style.display = "none";
 
   // Sale del modo pantalla completa si está activo
   if (document.fullscreenElement || document.webkitFullscreenElement) {
@@ -64,14 +87,6 @@ function cerrarReproductor() {
     }
   }
 }
-
-// Detecta si se presiona la tecla ESC para cerrar el reproductor
-document.addEventListener('keydown', (event) => {
-  if (event.key === 'Escape') {
-    cerrarReproductor();
-    cerrarCapitulos();
-  }
-});
 
 // Cambiar entre Inicio, Películas y Series
 function mostrarSeccion(seccion) {
@@ -102,5 +117,53 @@ function abrirCapitulos(tituloSerie) {
 }
 
 function cerrarCapitulos() {
-  document.getElementById('episodesModal').style.display = 'none';
+  const modal = document.getElementById('episodesModal');
+  if (modal) modal.style.display = 'none';
 }
+
+// Control por Teclado / Control Remoto (Navegación Smart TV)
+document.addEventListener('keydown', function(event) {
+  const videoModal = document.getElementById('videoModal');
+  const episodesModal = document.getElementById('episodesModal');
+
+  // Tecla ENTER o Botón OK del control remoto sobre elementos enfocados
+  if (event.key === 'Enter' && document.activeElement && document.activeElement.tagName !== 'INPUT') {
+    document.activeElement.click();
+  }
+
+  // Tecla ESCAPE o BACKSPACE para cerrar reproductores o modales
+  if (event.key === 'Escape' || event.key === 'Backspace') {
+    // Si se está escribiendo en un input, se respeta la tecla borrar
+    if (document.activeElement.tagName === 'INPUT') return;
+
+    if (videoModal && videoModal.style.display === 'flex') {
+      cerrarReproductor();
+      event.preventDefault();
+    } else if (episodesModal && episodesModal.style.display === 'flex') {
+      cerrarCapitulos();
+      event.preventDefault();
+    }
+  }
+});
+
+// --- Funcionalidad del Buscador en Tiempo Real ---
+document.addEventListener('DOMContentLoaded', () => {
+  const searchInput = document.getElementById('searchInput');
+
+  if (searchInput) {
+    searchInput.addEventListener('input', (e) => {
+      const busqueda = e.target.value.toLowerCase().trim();
+      const tarjetas = document.querySelectorAll('.card');
+
+      tarjetas.forEach(tarjeta => {
+        const textoTarjeta = tarjeta.textContent.toLowerCase();
+
+        if (textoTarjeta.includes(busqueda)) {
+          tarjeta.style.display = '';
+        } else {
+          tarjeta.style.display = 'none';
+        }
+      });
+    });
+  }
+});

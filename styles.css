@@ -10,18 +10,18 @@ body {
 .navbar {
   display: flex;
   align-items: center;
-  gap: 30px;
-  padding: 15px 4%;
+  justify-content: space-between;
+  padding: 10px 4%;
   background-color: #141414;
   position: sticky;
   top: 0;
   z-index: 100;
 }
 
-.nav-logo {
-  color: #E50914;
-  font-weight: bold;
-  font-size: 1.2rem;
+.nav-logo .app-logo {
+  height: 35px;
+  width: auto;
+  display: block;
 }
 
 .nav-links {
@@ -45,6 +45,21 @@ body {
   font-weight: bold;
 }
 
+/* Buscador en la navbar */
+.search-container input {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  color: white;
+  padding: 6px 12px;
+  outline: none;
+  font-size: 14px;
+}
+
+.search-container input:focus {
+  border-color: #e50914;
+}
+
 /* --- SECCIONES Y TARJETAS DEL CATÁLOGO --- */
 .catalog-section {
   padding: 20px 4%;
@@ -58,10 +73,11 @@ body {
   letter-spacing: 0.5px;
 }
 
+/* Aumentamos el ancho mínimo de la columna para tarjetas horizontales */
 .grid-container {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 15px;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
   padding: 15px 0;
 }
 
@@ -78,30 +94,19 @@ body {
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
 }
 
-.card img {
+/* Contenedor panorámico 16:9 nativo de YouTube */
+.poster-container {
   width: 100%;
-  height: 240px;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background-color: #111;
+}
+
+.poster-container img {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
   display: block;
-}
-
-.card-info {
-  padding: 10px;
-}
-
-.card-info h3 {
-  font-size: 0.95rem;
-  color: #ffffff;
-  margin: 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.card-info p {
-  font-size: 0.8rem;
-  color: #aaaaaa;
-  margin-top: 4px;
 }
 
 /* --- MODAL SELECTOR DE EPISODIOS --- */
@@ -127,10 +132,10 @@ body {
 .episode-item {
   display: flex;
   align-items: center;
-  gap: 15px;
-  padding: 12px;
+  gap: 12px;
+  padding: 8px 12px;
   background-color: #222;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
   transition: background 0.2s;
 }
@@ -139,8 +144,17 @@ body {
   background-color: #333;
 }
 
+/* Miniatura del episodio */
+.ep-thumb {
+  width: 80px;
+  height: 45px;
+  object-fit: cover;
+  border-radius: 4px;
+  background-color: #000;
+}
+
 .ep-num {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   font-weight: bold;
   color: #E50914;
 }
@@ -164,7 +178,7 @@ body {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: #000;
+  background-color: rgba(0, 0, 0, 0.85);
   z-index: 9999;
   justify-content: center;
   align-items: center;
@@ -291,4 +305,15 @@ body {
   color: #E50914;
   font-size: 14px;
   margin-top: 10px;
+}
+
+/* Efecto de marco / brillo al seleccionar con el control remoto o teclado */
+.card:focus,
+.episode-item:focus,
+button:focus,
+a:focus {
+  outline: 4px solid #e50914;
+  transform: scale(1.05);
+  transition: transform 0.2s, outline 0.2s;
+  z-index: 10;
 }

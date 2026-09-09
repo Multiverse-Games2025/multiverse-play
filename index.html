@@ -27,39 +27,69 @@
 
   <!-- Navegación Superior -->
   <nav class="navbar">
-    <div class="nav-logo">LOGOTIPO</div>
+    <div class="nav-logo">
+      <img src="logo.svg" alt="Logo" class="app-logo">
+    </div>
+
+    <!-- Botones de navegación -->
     <ul class="nav-links">
       <li><a href="#" id="link-inicio" class="active" onclick="mostrarSeccion('inicio')">Inicio</a></li>
       <li><a href="#" id="link-peliculas" onclick="mostrarSeccion('peliculas')">Películas</a></li>
       <li><a href="#" id="link-series" onclick="mostrarSeccion('series')">Series</a></li>
     </ul>
+
+    <!-- Buscador a la derecha -->
+    <div class="search-container">
+      <input type="text" id="searchInput" placeholder="Buscar...">
+    </div>
   </nav>
 
-  <main class="main-content">
+<main class="main-content">
     <!-- Sección Películas -->
     <section id="sec-peliculas" class="catalog-section">
       <h2>Películas</h2>
-      <div class="grid-container">
-        <div class="card" onclick="abrirReproductor('ID_DE_YOUTUBE')">
-          <img src="CARATULAS/peliculas/tu-pelicula.jpg" alt="Película">
+      <div class="grid-container" id="grid-peliculas">
+        
+        <!-- ================= PELÍCULA 1 ================= -->
+        <div class="card" onclick="abrirReproductor('uKt9q-moqPU')">
+          <div class="poster-container">
+            <img src="https://img.youtube.com/vi/uKt9q-moqPU/hqdefault.jpg" alt="Street Fighter: Puño Asesino" loading="lazy">
+          </div>
           <div class="card-info">
-            <h3>Nombre Película</h3>
+            <h3>Street Fighter: Puño Asesino</h3>
           </div>
         </div>
+        <!-- ============================================== -->
+
+        <!-- ================= PELÍCULA 2 (NUEVA) ================= -->
+        <div class="card" onclick="abrirReproductor('_68bUZD0Fz8')">
+          <div class="poster-container">
+            <img src="https://img.youtube.com/vi/_68bUZD0Fz8/hqdefault.jpg" alt="Nombre de la película" loading="lazy">
+          </div>
+          <div class="card-info">
+            <h3>Street Fighter Alpha</h3>
+          </div>
+        </div>
+        <!-- ====================================================== -->
+
       </div>
     </section>
 
     <!-- Sección Series -->
     <section id="sec-series" class="catalog-section">
       <h2>Series</h2>
-      <div class="grid-container">
-        <div class="card" onclick="abrirCapitulos('Saint Seiya: Lost Canvas')">
-          <img src="CARATULAS/series/tlostcanvas.png" alt="Saint Seiya">
+      <div class="grid-container" id="grid-series">
+        
+        <div class="card" onclick="abrirCapitulos('Saint Seiya: The Lost Canvas')">
+          <div class="poster-container">
+            <img src="https://img.youtube.com/vi/4pIw2LQkpdI/hqdefault.jpg" alt="Saint Seiya" loading="lazy">
+          </div>
           <div class="card-info">
-            <h3>Saint Seiya: Lost Canvas</h3>
+            <h3>Saint Seiya: The Lost Canvas</h3>
             <p>2 Temporadas</p>
           </div>
         </div>
+
       </div>
     </section>
   </main>
@@ -67,24 +97,29 @@
   <!-- Modal Selector de Capítulos -->
   <div id="episodesModal" class="modal">
     <div class="episodes-content">
-      <span class="close-btn" onclick="cerrarCapitulos()">&times;</span>
+      <span class="close-btn" tabindex="0" onclick="cerrarCapitulos()">&times;</span>
       <h2 id="seriesTitle">Nombre de la Serie</h2>
+      
       <div class="episodes-list">
-        <div class="episode-item" onclick="abrirReproductor('4pIw2LQkpdI')">
+        
+        <div class="episode-item" tabindex="0" onclick="abrirReproductor('4pIw2LQkpdI')">
+          <img src="https://img.youtube.com/vi/4pIw2LQkpdI/hqdefault.jpg" alt="Capítulo 1" class="ep-thumb">
           <span class="ep-num">1</span>
           <div class="ep-info">
-            <h4>Capítulo 1: La estrella de la profecía</h4>
+            <h4>Capítulo 1: La promesa</h4>
             <p>24 min</p>
           </div>
         </div>
         
-        <div class="episode-item" onclick="abrirReproductor('OTRO_ID_YOUTUBE')">
+        <div class="episode-item" tabindex="0" onclick="abrirReproductor('6Vbl9PMI2sg')">
+          <img src="https://img.youtube.com/vi/6Vbl9PMI2sg/hqdefault.jpg" alt="Capítulo 2" class="ep-thumb">
           <span class="ep-num">2</span>
           <div class="ep-info">
             <h4>Capítulo 2: El despertar de Hades</h4>
             <p>24 min</p>
           </div>
         </div>
+
       </div>
     </div>
   </div>
