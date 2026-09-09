@@ -49,21 +49,39 @@ function verificarPIN() {
   }
 }
 
-// Reproductor de Video
+// Variable global para controlar la instancia activa de HLS
+let hlsInstance = null;
+
+// Reproductor de Video (YouTube / Películas / Series)
 function abrirReproductor(idVideo) {
   const modal = document.getElementById('videoModal');
   const iframe = document.getElementById('youtubeIframe');
+  const videoPlayer = document.getElementById('html5VideoPlayer');
 
-  // Si le pasas un ID simple o un enlace directo, lo convierte a formato embed
-  let embedUrl = idVideo;
-  if (!idVideo.startsWith('http')) {
-    embedUrl = `https://www.youtube.com/embed/${idVideo}?autoplay=1&rel=0`;
+  // Si había una transmisión de IPTV activa, la cerramos y destruimos HLS limpiamente
+  if (hlsInstance) {
+    hlsInstance.destroy();
+    hlsInstance = null;
   }
 
-  iframe.src = embedUrl;
+  if (videoPlayer) {
+    videoPlayer.pause();
+    videoPlayer.src = "";
+    videoPlayer.style.display = 'none';
+  }
+  
+  if (iframe) {
+    iframe.style.display = 'block';
+    let embedUrl = idVideo;
+    if (!idVideo.startsWith('http')) {
+      embedUrl = `https://www.youtube.com/embed/${idVideo}?autoplay=1&rel=0`;
+    }
+    iframe.src = embedUrl;
+  }
+
   modal.style.display = "flex";
 
-  // Activa la pantalla completa nativa del monitor/navegador
+  // Activa la pantalla completa nativa
   if (modal.requestFullscreen) {
     modal.requestFullscreen().catch(err => console.log(err));
   } else if (modal.webkitRequestFullscreen) { /* Safari */
@@ -71,11 +89,89 @@ function abrirReproductor(idVideo) {
   }
 }
 
-function cerrarReproductor() {
+// Reproductor de Canales IPTV en Vivo (.m3u8)
+function reproducirCanal(urlCanal, nombreCanal) {
   const modal = document.getElementById('videoModal');
   const iframe = document.getElementById('youtubeIframe');
 
-  if (iframe) iframe.src = "";
+  // Ocultamos el iframe de YouTube
+  if (iframe) {
+    iframe.src = "";
+    iframe.style.display = 'none';
+  }
+  
+  // Obtenemos o creamos el elemento de video HTML5 para el stream IPTV
+  let videoPlayer = document.getElementById('html5VideoPlayer');
+  if (!videoPlayer) {
+    videoPlayer = document.createElement('video');
+    videoPlayer.id = 'html5VideoPlayer';
+    videoPlayer.controls = true;
+    videoPlayer.autoplay = true;
+    videoPlayer.style.width = '100%';
+    videoPlayer.style.height = '100%';
+    videoPlayer.style.backgroundColor = '#000';
+    iframe.parentNode.appendChild(videoPlayer);
+  }
+  videoPlayer.style.display = 'block';
+
+  // Si ya existía una sesión de HLS abierta, la destruimos antes de cargar el nuevo canal
+  if (hlsInstance) {
+    hlsInstance.destroy();
+    hlsInstance = null;
+  }
+
+  // Reproducción con HLS.js o soporte nativo (Safari)
+  if (Hls.isSupported()) {
+    hlsInstance = new Hls();
+    hlsInstance.loadSource(urlCanal);
+    hlsInstance.attachMedia(videoPlayer);
+    hlsInstance.on(Hls.Events.MANIFEST_PARSED, function() {
+      videoPlayer.play().catch(err => console.log("Autoplay bloqueado:", err));
+    });
+    // Manejo de errores de conexión del stream
+    hlsInstance.on(Hls.Events.ERROR, function(event, data) {
+      if (data.fatal) {
+        console.error("Error fatal en HLS:", data.details);
+      }
+    });
+  } else if (videoPlayer.canPlayType('application/vnd.apple.mpegurl')) {
+    videoPlayer.src = urlCanal;
+    videoPlayer.addEventListener('loadedmetadata', function() {
+      videoPlayer.play().catch(err => console.log("Autoplay bloqueado:", err));
+    });
+  }
+
+  modal.style.display = "flex";
+
+  if (modal.requestFullscreen) {
+    modal.requestFullscreen().catch(err => console.log(err));
+  } else if (modal.webkitRequestFullscreen) {
+    modal.webkitRequestFullscreen();
+  }
+}
+
+function cerrarReproductor() {
+  const modal = document.getElementById('videoModal');
+  const iframe = document.getElementById('youtubeIframe');
+  const videoPlayer = document.getElementById('html5VideoPlayer');
+
+  if (iframe) {
+    iframe.src = "";
+    iframe.style.display = "block";
+  }
+  
+  // Destruir HLS al cerrar para liberar memoria y recursos de red
+  if (hlsInstance) {
+    hlsInstance.destroy();
+    hlsInstance = null;
+  }
+
+  if (videoPlayer) {
+    videoPlayer.pause();
+    videoPlayer.src = "";
+    videoPlayer.style.display = "none";
+  }
+
   if (modal) modal.style.display = "none";
 
   // Sale del modo pantalla completa si está activo
@@ -88,25 +184,34 @@ function cerrarReproductor() {
   }
 }
 
-// Cambiar entre Inicio, Películas y Series
+// Cambiar entre Inicio, Películas, Series y TV en Vivo
 function mostrarSeccion(seccion) {
   const secPeliculas = document.getElementById('sec-peliculas');
   const secSeries = document.getElementById('sec-series');
+  const secTv = document.getElementById('sec-tv');
   
   document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
 
   if (seccion === 'inicio') {
-    secPeliculas.style.display = 'block';
-    secSeries.style.display = 'block';
+    if (secPeliculas) secPeliculas.style.display = 'block';
+    if (secSeries) secSeries.style.display = 'block';
+    if (secTv) secTv.style.display = 'none';
     document.getElementById('link-inicio').classList.add('active');
   } else if (seccion === 'peliculas') {
-    secPeliculas.style.display = 'block';
-    secSeries.style.display = 'none';
+    if (secPeliculas) secPeliculas.style.display = 'block';
+    if (secSeries) secSeries.style.display = 'none';
+    if (secTv) secTv.style.display = 'none';
     document.getElementById('link-peliculas').classList.add('active');
   } else if (seccion === 'series') {
-    secPeliculas.style.display = 'none';
-    secSeries.style.display = 'block';
+    if (secPeliculas) secPeliculas.style.display = 'none';
+    if (secSeries) secSeries.style.display = 'block';
+    if (secTv) secTv.style.display = 'none';
     document.getElementById('link-series').classList.add('active');
+  } else if (seccion === 'tv') {
+    if (secPeliculas) secPeliculas.style.display = 'none';
+    if (secSeries) secSeries.style.display = 'none';
+    if (secTv) secTv.style.display = 'block';
+    document.getElementById('link-tv').classList.add('active');
   }
 }
 
@@ -133,7 +238,6 @@ document.addEventListener('keydown', function(event) {
 
   // Tecla ESCAPE o BACKSPACE para cerrar reproductores o modales
   if (event.key === 'Escape' || event.key === 'Backspace') {
-    // Si se está escribiendo en un input, se respeta la tecla borrar
     if (document.activeElement.tagName === 'INPUT') return;
 
     if (videoModal && videoModal.style.display === 'flex') {

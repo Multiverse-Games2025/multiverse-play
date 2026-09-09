@@ -6,6 +6,8 @@
   <title>Mi Netflix Personal</title>
   <link rel="stylesheet" href="styles.css">
   <link rel="manifest" href="manifest.json">
+  <!-- Librería HLS.js para reproducir enlaces IPTV (.m3u8) en TV Box, celulares y PC -->
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 </head>
 <body>
 
@@ -36,6 +38,7 @@
       <li><a href="#" id="link-inicio" class="active" onclick="mostrarSeccion('inicio')">Inicio</a></li>
       <li><a href="#" id="link-peliculas" onclick="mostrarSeccion('peliculas')">Películas</a></li>
       <li><a href="#" id="link-series" onclick="mostrarSeccion('series')">Series</a></li>
+      <li><a href="#" id="link-tv" onclick="mostrarSeccion('tv')">TV en Vivo</a></li>
     </ul>
 
     <!-- Buscador a la derecha -->
@@ -44,7 +47,7 @@
     </div>
   </nav>
 
-<main class="main-content">
+  <main class="main-content">
     <!-- Sección Películas -->
     <section id="sec-peliculas" class="catalog-section">
       <h2>Películas</h2>
@@ -92,6 +95,25 @@
 
       </div>
     </section>
+
+    <!-- Sección TV en Vivo (NUEVA) -->
+    <section id="sec-tv" class="catalog-section" style="display: none;">
+      <h2>TV en Vivo</h2>
+      <div class="grid-container" id="grid-tv">
+        
+        <!-- Tarjeta de Telefe HD -->
+        <div class="card" onclick="reproducirCanal('http://45.134.141.161:2200/ARG/TELEFE_HD/index.m3u8', 'Telefe HD')">
+          <div class="poster-container">
+            <img src="CARATULAS/tv/telefe-logo.jpg" alt="Telefe HD" loading="lazy">
+          </div>
+          <div class="card-info">
+            <h3>Telefe HD</h3>
+            <p>En Vivo</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
   </main>
 
   <!-- Modal Selector de Capítulos -->
@@ -129,6 +151,8 @@
     <div class="modal-content">
       <span class="close-btn" onclick="cerrarReproductor()">&times;</span>
       <iframe id="youtubeIframe" src="" title="Reproductor" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>
+      <!-- Reproductor HTML5 dedicado para IPTV (.m3u8) que se activa automáticamente al tocar un canal -->
+      <video id="html5VideoPlayer" controls autoplay style="display: none; width: 100%; height: 100%; background: #000;"></video>
     </div>
   </div>
 
