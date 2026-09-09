@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "io.github.multiverse_games2025.twa",
+        "sha256_cert_fingerprints": ["E4:D9:94:94:79:01:EE:07:CE:2F:98:AD:E9:F1:A7:46:65:AA:0B:36:15:3F:10:B3:68:DD:6D:E0:71:F8:F5:D9"]
+      }
+    }]
