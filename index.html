@@ -9,9 +9,8 @@
 </head>
 <body>
 
- <!-- Pantalla de Carga (Splash Screen) -->
+  <!-- Pantalla de Carga (Splash Screen) -->
   <div id="splash-screen">
-    <!-- Reemplazamos el h1 por tu imagen personalizada -->
     <img src="logo.jpg" alt="Logo" class="splash-logo-img">
     <div class="loader"></div>
   </div>
@@ -54,7 +53,6 @@
     <section id="sec-series" class="catalog-section">
       <h2>Series</h2>
       <div class="grid-container">
-        <!-- Al hacer clic se abre el panel de capítulos -->
         <div class="card" onclick="abrirCapitulos('Saint Seiya: Lost Canvas')">
           <img src="CARATULAS/series/tlostcanvas.png" alt="Saint Seiya">
           <div class="card-info">
@@ -72,7 +70,6 @@
       <span class="close-btn" onclick="cerrarCapitulos()">&times;</span>
       <h2 id="seriesTitle">Nombre de la Serie</h2>
       <div class="episodes-list">
-        <!-- Lista de episodios -->
         <div class="episode-item" onclick="abrirReproductor('4pIw2LQkpdI')">
           <span class="ep-num">1</span>
           <div class="ep-info">
@@ -92,25 +89,20 @@
     </div>
   </div>
 
-      <!-- Puedes duplicar más tarjetas de series según necesites -->
-
-    </div>
-  </section>
-
   <!-- Ventana Flotante / Modal para el Reproductor Fullscreen -->
   <div id="videoModal" class="modal">
     <div class="modal-content">
       <span class="close-btn" onclick="cerrarReproductor()">&times;</span>
-      <iframe id="youtubeIframe" src="" title="Reproductor" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+      <iframe id="youtubeIframe" src="" title="Reproductor" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>
     </div>
   </div>
 
   <script src="script.js"></script>
 
   <script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js');
-  }
-</script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js');
+    }
+  </script>
 </body>
 </html>

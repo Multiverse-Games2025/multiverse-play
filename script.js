@@ -1,4 +1,4 @@
-// Definimos tu código de acceso (puedes cambiarlo aquí)
+// Definimos tu código de acceso
 const PIN_CORRECTO = "1234";
 
 // Al cargar la página, muestra la Splash Screen por 2.5 segundos
@@ -26,28 +26,52 @@ function verificarPIN() {
   }
 }
 
-function abrirReproductor(videoId) {
+// Reproductor de Video
+function abrirReproductor(idVideo) {
   const modal = document.getElementById('videoModal');
   const iframe = document.getElementById('youtubeIframe');
-  
-  // Parámetros agregados:
-  // controls=1 (mantiene solo barra de tiempo y play básicos)
-  // modestbranding=1 (oculta el logo grande de YouTube)
-  // rel=0 (evita que sugiera videos de otros canales al pausar/terminar)
-  // fs=1 (permite botón de pantalla completa)
-  iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&modestbranding=1&rel=0&controls=1&fs=1`;
-  
-  modal.style.display = 'flex';
+
+  // Si le pasas un ID simple o un enlace directo, lo convierte a formato embed
+  let embedUrl = idVideo;
+  if (!idVideo.startsWith('http')) {
+    embedUrl = `https://www.youtube.com/embed/${idVideo}?autoplay=1&rel=0`;
+  }
+
+  iframe.src = embedUrl;
+  modal.style.display = "flex";
+
+  // Activa la pantalla completa nativa del monitor/navegador
+  if (modal.requestFullscreen) {
+    modal.requestFullscreen().catch(err => console.log(err));
+  } else if (modal.webkitRequestFullscreen) { /* Safari */
+    modal.webkitRequestFullscreen();
+  }
 }
 
 function cerrarReproductor() {
   const modal = document.getElementById('videoModal');
   const iframe = document.getElementById('youtubeIframe');
-  
-  // Limpia el reproductor para que se corte el audio al cerrar
-  iframe.src = '';
-  modal.style.display = 'none';
+
+  iframe.src = "";
+  modal.style.display = "none";
+
+  // Sale del modo pantalla completa si está activo
+  if (document.fullscreenElement || document.webkitFullscreenElement) {
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    } else if (document.webkitExitFullscreen) {
+      document.webkitExitFullscreen();
+    }
+  }
 }
+
+// Detecta si se presiona la tecla ESC para cerrar el reproductor
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape') {
+    cerrarReproductor();
+    cerrarCapitulos();
+  }
+});
 
 // Cambiar entre Inicio, Películas y Series
 function mostrarSeccion(seccion) {
