@@ -1,6 +1,7 @@
 {
   "name": "Mi Netflix Personal",
   "short_name": "StreamApp",
+  "description": "Aplicación privada de streaming personal",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#141414",
@@ -8,8 +9,9 @@
   "icons": [
     {
       "src": "logo.jpg",
-      "sizes": "512x512",
-      "type": "image/jpeg"
+      "sizes": "192x192 512x512",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
     }
   ]
 }
