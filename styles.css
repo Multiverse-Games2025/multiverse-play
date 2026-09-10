@@ -118,65 +118,102 @@ body {
   display: block;
 }
 
-/* --- MODAL SELECTOR DE EPISODIOS --- */
+/* Información dentro de las tarjetas */
+.card-info {
+  padding: 12px;
+}
+
+.card-info h3 {
+  font-size: 0.95rem;
+  margin: 0 0 5px 0;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card-info p {
+  font-size: 0.8rem;
+  margin: 0;
+  color: #aaa;
+}
+
+/* --- MODAL SELECTOR DE EPISODIOS (SERIES) --- */
 .episodes-content {
   background-color: #181818;
   color: #fff;
   padding: 25px;
   border-radius: 8px;
   width: 90%;
-  max-width: 500px;
+  max-width: 550px;
   position: relative;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+}
+
+.episodes-content h2 {
+  margin-top: 0;
+  font-size: 1.3rem;
+  color: #fff;
+  padding-right: 30px;
 }
 
 .episodes-list {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
   margin-top: 15px;
-  max-height: 350px;
+  max-height: 380px;
   overflow-y: auto;
+  padding-right: 5px;
 }
 
 .episode-item {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 12px;
-  padding: 8px 12px;
+  padding: 10px 14px;
   background-color: #222;
   border-radius: 6px;
-  cursor: pointer;
   transition: background 0.2s;
 }
 
 .episode-item:hover {
-  background-color: #333;
+  background-color: #2a2a2a;
 }
 
-/* Miniatura del episodio */
-.ep-thumb {
-  width: 80px;
-  height: 45px;
-  object-fit: cover;
-  border-radius: 4px;
-  background-color: #000;
+.episode-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
 }
 
-.ep-num {
-  font-size: 1.1rem;
+.episode-number {
+  font-size: 0.75rem;
   font-weight: bold;
   color: #E50914;
+  letter-spacing: 0.5px;
 }
 
-.ep-info h4 {
-  margin: 0;
-  font-size: 0.95rem;
+.episode-title {
+  font-size: 0.9rem;
+  color: #fff;
 }
 
-.ep-info p {
-  margin: 3px 0 0 0;
+.play-episode-btn {
+  background-color: #E50914;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
   font-size: 0.8rem;
-  color: #aaa;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s;
+}
+
+.play-episode-btn:hover {
+  background-color: #f40612;
 }
 
 /* --- REPRODUCTOR PANTALLA COMPLETA 100% (MODAL FULLSCREEN) --- */
@@ -187,7 +224,7 @@ body {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.85);
+  background-color: rgba(0, 0, 0, 0.9);
   z-index: 9999;
   justify-content: center;
   align-items: center;
@@ -200,6 +237,9 @@ body {
   margin: 0;
   padding: 0;
   background-color: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 #youtubeIframe {
@@ -213,20 +253,22 @@ body {
   position: absolute;
   top: 15px;
   right: 20px;
-  font-size: 35px;
+  font-size: 30px;
   color: #fff;
   z-index: 10000;
   cursor: pointer;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.6);
   border-radius: 50%;
   width: 40px;
   height: 40px;
   text-align: center;
-  line-height: 35px;
+  line-height: 38px;
+  user-select: none;
 }
 
 .close-btn:hover {
   color: #E50914;
+  background: rgba(0, 0, 0, 0.8);
 }
 
 /* --- PANTALLAS DE SPLASH Y LOGIN --- */
@@ -320,9 +362,10 @@ body {
 .card:focus,
 .episode-item:focus,
 button:focus,
-a:focus {
+a:focus,
+.play-episode-btn:focus {
   outline: 4px solid #e50914;
-  transform: scale(1.05);
+  transform: scale(1.03);
   transition: transform 0.2s, outline 0.2s;
   z-index: 10;
 }
