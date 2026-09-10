@@ -179,6 +179,7 @@ function cerrarReproductor() {
   const iframe = document.getElementById('youtubeIframe');
   const videoPlayer = document.getElementById('html5VideoPlayer');
 
+  // Vaciamos el src del iframe para matar el video y el audio de YouTube al instante
   if (iframe) {
     iframe.src = "";
     iframe.style.display = "block";
