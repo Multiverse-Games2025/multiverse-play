@@ -4,22 +4,27 @@ body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
+  overflow-x: hidden; /* Evita que la página se mueva hacia los costados en Android */
 }
 
-/* --- MENÚ DE NAVEGACIÓN SUPERIOR --- */
+/* --- MENÚ DE NAVEGACIÓN SUPERIOR (Optimizado para Android) --- */
 .navbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 4%;
+  padding: 8px 12px;
   background-color: #141414;
   position: sticky;
   top: 0;
   z-index: 100;
+  flex-wrap: nowrap;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .nav-logo .app-logo {
-  height: 35px;
+  height: 30px;
   width: auto;
   display: block;
 }
@@ -27,7 +32,7 @@ body {
 .nav-links {
   list-style: none;
   display: flex;
-  gap: 20px;
+  gap: 10px; /* Reducido para que entren cómodamente en celulares */
   margin: 0;
   padding: 0;
 }
@@ -35,8 +40,9 @@ body {
 .nav-links a {
   color: #aaaaaa;
   text-decoration: none;
-  font-size: 0.95rem;
+  font-size: 0.85rem; /* Ligeramente más compacto para pantallas móviles */
   transition: color 0.3s;
+  white-space: nowrap;
 }
 
 .nav-links a:hover,
@@ -45,19 +51,22 @@ body {
   font-weight: bold;
 }
 
-/* Buscador en la navbar */
+/* Buscador en la navbar adaptado a celulares */
 .search-container input {
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 4px;
   color: white;
-  padding: 6px 12px;
+  padding: 5px 8px;
   outline: none;
-  font-size: 14px;
+  font-size: 12px;
+  width: 75px; /* Compacto para que no expulse al menú en Android */
 }
 
 .search-container input:focus {
   border-color: #e50914;
+  width: 110px; /* Se expande un poco al tocarlo */
+  transition: width 0.3s ease;
 }
 
 /* --- SECCIONES Y TARJETAS DEL CATÁLOGO --- */
@@ -316,24 +325,4 @@ a:focus {
   transform: scale(1.05);
   transition: transform 0.2s, outline 0.2s;
   z-index: 10;
-}
-
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 15px;
-  flex-wrap: nowrap; /* Evita que los elementos bajen de renglón a la fuerza */
-  overflow: hidden;
-}
-
-.nav-links {
-  display: flex;
-  list-style: none;
-  gap: 10px; /* Reduce un poco el espacio entre enlaces para que entren en celulares */
-  font-size: 14px;
-}
-
-body {
-  overflow-x: hidden; /* Evita que la página se mueva hacia los costados */
 }

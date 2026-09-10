@@ -1,7 +1,7 @@
 // Definimos tu código de acceso
 const PIN_CORRECTO = "1234";
 
-// Variable global para controlar la instancia activa de HLS (¡Esto faltaba arriba del todo!)
+// Variable global para controlar la instancia activa de HLS
 let hlsInstance = null;
 
 // Al cargar la página, muestra la Splash Screen por 2.5 segundos
@@ -52,6 +52,45 @@ function verificarPIN() {
   }
 }
 
+// ==========================================
+// FUNCIÓN FALTANTE: ABRIR REPRODUCTOR DE YOUTUBE
+// ==========================================
+function abrirReproductor(videoId) {
+  const modal = document.getElementById('videoModal');
+  const iframe = document.getElementById('youtubeIframe');
+  const videoPlayer = document.getElementById('html5VideoPlayer');
+
+  // Ocultamos el reproductor de IPTV por si estuviera activo
+  if (videoPlayer) {
+    videoPlayer.pause();
+    videoPlayer.src = "";
+    videoPlayer.style.display = 'none';
+  }
+
+  // Si ya existía una sesión HLS abierta, la destruimos
+  if (hlsInstance) {
+    hlsInstance.destroy();
+    hlsInstance = null;
+  }
+
+  // Configuramos y mostramos el iframe de YouTube con autoplay
+  if (iframe) {
+    iframe.style.display = 'block';
+    iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&enablejsapi=1`;
+  }
+
+  if (modal) {
+    modal.style.display = "flex";
+  }
+
+  // Pantalla completa automática (compatible con TV Box y navegadores)
+  if (modal.requestFullscreen) {
+    modal.requestFullscreen().catch(err => console.log(err));
+  } else if (modal.webkitRequestFullscreen) {
+    modal.webkitRequestFullscreen();
+  }
+}
+
 // Reproductor de Canales IPTV en Vivo (.m3u8) compatible con Android
 function reproducirCanal(urlCanal, nombreCanal) {
   const modal = document.getElementById('videoModal');
@@ -96,7 +135,6 @@ function reproducirCanal(urlCanal, nombreCanal) {
     hlsInstance.attachMedia(videoPlayer);
     
     hlsInstance.on(Hls.Events.MANIFEST_PARSED, function() {
-      // En Android es mejor dejar que el usuario presione el botón play si el navegador frena el autoplay
       const playPromise = videoPlayer.play();
       if (playPromise !== undefined) {
         playPromise.catch(error => {
@@ -121,7 +159,6 @@ function reproducirCanal(urlCanal, nombreCanal) {
       }
     });
   } else if (videoPlayer.canPlayType('application/vnd.apple.mpegurl')) {
-    // Para dispositivos con soporte nativo (como Safari o algunos reproductores internos)
     videoPlayer.src = urlCanal;
     videoPlayer.addEventListener('loadedmetadata', function() {
       videoPlayer.play().catch(err => console.log(err));
