@@ -43,15 +43,15 @@ const baseDatosSeries = {
     { temporada: 1, cap: 3, titulo: "Capítulo 3:", videoId: "EM5ZSfw75hE" },
     { temporada: 1, cap: 4, titulo: "Capítulo 4:", videoId: "Owc7Jx1wJVI" },
     { temporada: 1, cap: 5, titulo: "Capítulo 5:", videoId: "04RajiZ3Qk0" },
-    { temporada: 1, cap: 6, titulo: "Capítulo 6:", videoId: "Vk76C_a4I" },
+    { temporada: 1, cap: 6, titulo: "Capítulo 6:", videoId: "8OG15Rf2L3M" },
     { temporada: 1, cap: 7, titulo: "Capítulo 7:", videoId: "merfdypbQho" },
     { temporada: 1, cap: 8, titulo: "Capítulo 8:", videoId: "RtXB2K6Mt3Q" },
-    { temporada: 1, cap: 9, titulo: "Capítulo 9:", videoId: "DnXrVCj--0" },
-    { temporada: 1, cap: 10, titulo: "Capítulo 10:", videoId: "b67xjtCUMGo" },
-    { temporada: 1, cap: 11, titulo: "Capítulo 11:", videoId: "Yz3643T9tKI" },
-    { temporada: 1, cap: 12, titulo: "Capítulo 12:", videoId: "1MDS6NmGSNc" },
+    { temporada: 1, cap: 9, titulo: "Capítulo 9:", videoId: "raOqjc2JBqE" },
+    { temporada: 1, cap: 10, titulo: "Capítulo 10:", videoId: "nXXI38yvzGY" },
+    { temporada: 1, cap: 11, titulo: "Capítulo 11:", videoId: "JauyG9xY1Lk" },
+    { temporada: 1, cap: 12, titulo: "Capítulo 12:", videoId: "yuK3_tlUfU0" },
     { temporada: 1, cap: 13, titulo: "Capítulo 13:", videoId: "dL79EYdLNPc" },
-    { temporada: 1, cap: 14, titulo: "Capítulo 14:", videoId: "g4wFesEwHSA" },
+    { temporada: 1, cap: 14, titulo: "Capítulo 14:", videoId: "v9YF3QHhUzk" },
     { temporada: 1, cap: 15, titulo: "Capítulo 15:", videoId: "uEJKmMQ2Lr4" },
     { temporada: 1, cap: 16, titulo: "Capítulo 16:", videoId: "9nAgYIF9dec" },
     { temporada: 1, cap: 17, titulo: "Capítulo 17:", videoId: "1mt82gWtwas" },
@@ -77,6 +77,9 @@ const baseDatosSeries = {
     { temporada: 1, cap: 37, titulo: "Capítulo 37:", videoId: "4pbotQkUz14" },
     { temporada: 1, cap: 38, titulo: "Capítulo 38:", videoId: "91RbJrI6pRY" },
     { temporada: 1, cap: 39, titulo: "Capítulo 39:", videoId: "SjVJ8FADurk" },
+  ],
+  "Farsantes": [
+    { temporada: 1, cap: 1, titulo: "Capítulo 1:", videoId: "Um_LdCvuKr0" },
   ]
 };
 
