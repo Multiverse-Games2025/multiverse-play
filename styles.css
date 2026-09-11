@@ -369,3 +369,12 @@ a:focus,
   transition: transform 0.2s, outline 0.2s;
   z-index: 10;
 }
+
+/* --- Tarjetas cuadradas solo para TV en Vivo --- */
+#sec-tv .grid-container {
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+}
+
+#sec-tv .poster-container {
+  aspect-ratio: 1 / 1;
+}
