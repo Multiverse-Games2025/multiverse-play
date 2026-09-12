@@ -132,19 +132,12 @@ function verificarPIN() {
 }
 
 // ==========================================
-// ABRIR REPRODUCTOR DE YOUTUBE
+// ABRIR REPRODUCTOR (SOPORTA YOUTUBE E INTERNET ARCHIVE / MP4)
 // ==========================================
-function abrirReproductor(videoId) {
+function abrirReproductor(fuenteVideo) {
   const modal = document.getElementById('videoModal');
   const iframe = document.getElementById('youtubeIframe');
-  const videoPlayer = document.getElementById('html5VideoPlayer');
-
-  // Ocultamos el reproductor de IPTV por si estuviera activo
-  if (videoPlayer) {
-    videoPlayer.pause();
-    videoPlayer.src = "";
-    videoPlayer.style.display = 'none';
-  }
+  let videoPlayer = document.getElementById('html5VideoPlayer');
 
   // Si ya existía una sesión HLS abierta, la destruimos
   if (hlsInstance) {
@@ -152,17 +145,55 @@ function abrirReproductor(videoId) {
     hlsInstance = null;
   }
 
-  // Configuramos y mostramos el iframe de YouTube con autoplay
-  if (iframe) {
-    iframe.style.display = 'block';
-    iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&enablejsapi=1`;
+  // Comprobamos si la fuente es un enlace directo de video (MP4) o un ID de YouTube
+  const esEnlaceDirecto = fuenteVideo.startsWith('http://') || fuenteVideo.startsWith('https://');
+
+  if (esEnlaceDirecto) {
+    // 1. ES UN MP4 (Internet Archive u otro servidor privado)
+    if (iframe) {
+      iframe.src = "";
+      iframe.style.display = 'none'; // Ocultamos el iframe de YouTube
+    }
+
+    // Obtenemos o creamos el elemento de video HTML5 nativo
+    if (!videoPlayer) {
+      videoPlayer = document.createElement('video');
+      videoPlayer.id = 'html5VideoPlayer';
+      videoPlayer.controls = true;
+      videoPlayer.autoplay = true;
+      videoPlayer.playsInline = true;
+      videoPlayer.style.width = '100%';
+      videoPlayer.style.height = '100%';
+      videoPlayer.style.backgroundColor = '#000';
+      if (iframe && iframe.parentNode) {
+        iframe.parentNode.appendChild(videoPlayer);
+      }
+    }
+
+    videoPlayer.style.display = 'block';
+    videoPlayer.src = fuenteVideo;
+    videoPlayer.load();
+    videoPlayer.play().catch(err => console.log("Autoplay bloqueado, requiere interacción", err));
+
+  } else {
+    // 2. ES UN VIDEO DE YOUTUBE (ID tradicional)
+    if (videoPlayer) {
+      videoPlayer.pause();
+      videoPlayer.src = "";
+      videoPlayer.style.display = 'none'; // Ocultamos el reproductor HTML5
+    }
+
+    if (iframe) {
+      iframe.style.display = 'block';
+      iframe.src = `https://www.youtube.com/embed/${fuenteVideo}?autoplay=1&enablejsapi=1`;
+    }
   }
 
   if (modal) {
     modal.style.display = "flex";
   }
 
-  // Pantalla completa automática (compatible con TV Box y navegadores)
+  // Pantalla completa automática
   if (modal.requestFullscreen) {
     modal.requestFullscreen().catch(err => console.log(err));
   } else if (modal.webkitRequestFullscreen) {
